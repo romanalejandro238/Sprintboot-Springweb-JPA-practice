@@ -24,7 +24,7 @@ public class StudentService {
 
     private final String internalServerErrorRequest = "The request were not successful";
     private final String conflictCreate = "Student email was already in use";
-    private final String conflictDelete = "Student doesn't exist";
+    // private final String conflictDelete = "Student doesn't exist";
     private final String noChangesMade = "Student were not updated";
 
     @Autowired
@@ -124,11 +124,11 @@ public class StudentService {
             Student student = studentRepository.findById(studentId)
                     .orElseThrow(() -> new IllegalStateException("Student " + studentId + " does not exist"));
 
+            Boolean nameChanged = false;
+
             if (name != null && name.length() > 0 && !Objects.equals(student.getName(), name)) {
                 student.setName(name);
-                StudentApiResponse apiResponse = new StudentApiResponse(HttpStatus.OK.value(), updateSuccessfully,
-                            student);
-                    return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+                nameChanged = true;
             }
 
             if (email != null && email.length() > 0 && !Objects.equals(student.getEmail(), email)) {
@@ -145,9 +145,15 @@ public class StudentService {
                 }
             }
 
-            StudentApiResponse apiResponse = new StudentApiResponse(HttpStatus.OK.value(), noChangesMade,
-                            student);
-                    return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+            if (nameChanged) {
+                StudentApiResponse apiResponse = new StudentApiResponse(HttpStatus.OK.value(), updateSuccessfully,
+                        student);
+                return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+            } else {
+                StudentApiResponse apiResponse = new StudentApiResponse(HttpStatus.OK.value(), noChangesMade,
+                        student);
+                return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+            }
 
         } catch (Exception e) {
             StudentApiResponse apiResponse = new StudentApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
