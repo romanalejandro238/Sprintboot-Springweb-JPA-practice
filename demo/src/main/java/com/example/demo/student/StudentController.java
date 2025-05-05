@@ -3,6 +3,7 @@ package com.example.demo.student;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,32 +33,36 @@ public class StudentController {
     }
     
     @GetMapping(path = "getAll")
-    public List<Student> getStudents() {
-
-        return service.getStudents();
+    public ResponseEntity<StudentApiResponse> getStudents() {
+        ResponseEntity<StudentApiResponse> response = service.getStudents();
+        return response;
     }
 
     @PostMapping(path = "addStudent")
-    public void addStudents(@RequestBody Student student) {
-         service.addStudent(student);
+    public ResponseEntity<StudentApiResponse> addStudents(@RequestBody Student student) {
+        ResponseEntity<StudentApiResponse> response = service.addStudent(student);
+        return response;
     }
 
     @DeleteMapping(path = "deleteStudent")
-    public void deleteStudent(@RequestBody Student student) {
-        service.deleteStudent(student);
+    public ResponseEntity<StudentApiResponse> deleteStudent(@RequestBody Student student) {
+        ResponseEntity<StudentApiResponse> response = service.deleteStudent(student);
+        return response;
+        
     }
 
     @DeleteMapping(path = "deleteStudent/{studentId}")
-    public void deleteStudent(@PathVariable("studentId") Long studentId) {
-        service.deleteStudent(studentId);
+    public ResponseEntity<StudentApiResponse> deleteStudent(@PathVariable("studentId") Long studentId) {  
+        ResponseEntity<StudentApiResponse> response = service.deleteStudent(studentId);
+        return response;
     }
 
     @PutMapping(path = "updateStudent/{studentId}")
-    public void updateStudent(@PathVariable("studentId") Long studentId,
+    public ResponseEntity<StudentApiResponse> updateStudent(@PathVariable("studentId") Long studentId,
                               @RequestParam(required = false) String name, 
                               @RequestParam(required = false) String email){
-                                
-        service.updateStudent(studentId,name,email);
+        ResponseEntity<StudentApiResponse> response = service.updateStudent(studentId,name,email);
+        return response;
     }
 
 
